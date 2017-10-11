@@ -3,8 +3,6 @@ import EventEmitter from 'events';
 import React, { Component } from 'react';
 import sql from 'sql.js';
 import Grid from './Grid';
-import logo from './logo.svg';
-import './App.css';
 
 const emitter = new EventEmitter();
 
@@ -159,7 +157,6 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">CSV SQL Live!</h1>
         </header>
         <p className="App-intro">
