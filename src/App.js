@@ -37,9 +37,6 @@ const createDB = (data) => {
   }
   insertStmt.free();
 
-  const res = db.exec("SELECT * FROM csv");
-  console.log(res[0].columns, res[0].values);
-
   return db;
 };
 
@@ -62,8 +59,12 @@ const handleFile = async (e) => {
 
     const db = createDB(data);
 
+    const res = db.exec("SELECT * FROM csv");
+    console.log(res[0].columns, res[0].values);
+
     emitter.emit('updateState', {
-      status: 'idle',
+      db,
+      status: 'loaded',
     });
   } catch (err) {
     console.error(err);
@@ -83,25 +84,71 @@ const LoadCSVButton = () => {
   );
 };
 
+const handleQuery = (e) => {
+  e.preventDefault();
+};
+
+class QueryForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: 'SELECT * FROM csv'};
+  }
+
+  handleChange = (e) => {
+    this.setState({value: e.target.value});
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    emitter.emit('runQuery', this.state.value);
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
+          <input type="text" value={this.state.value} onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  };
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      db: undefined,
       errorMsg: undefined,
-      fileData: undefined,
       query: '',
       resultCols: [],
       resultRows: [],
-      status: 'idle', // idle, parsing-file, creating-db, running-query, error
+      status: 'init', // init, parsing-file, creating-db, loaded, running-query, error
     }
   }
 
   componentDidMount() {
-      emitter.on('updateState', (state) => {
-        console.log('updateState', state);
-        this.setState(state);
+    emitter.on('updateState', (state) => {
+      console.log('updateState', state);
+      this.setState(state);
+    });
+
+    emitter.on('runQuery', (query) => {
+      console.log('runQuery', query);
+      this.setState({
+        status: 'running-query',
       });
+
+      const res = this.state.db.exec(query);
+      console.log(res[0].columns, res[0].values);
+
+      this.setState({
+        status: 'loaded',
+      });
+    });
   }
 
   render() {
@@ -114,6 +161,7 @@ class App extends Component {
         <p className="App-intro">
           <LoadCSVButton />
         </p>
+        {['loaded', 'running-query', 'error'].includes(this.state.status) ? <QueryForm /> : null}
       </div>
     );
   }
