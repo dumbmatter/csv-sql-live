@@ -2,6 +2,7 @@ import Papa from 'papaparse';
 import EventEmitter from 'events';
 import React, { Component } from 'react';
 import sql from 'sql.js';
+import Grid from './Grid';
 import logo from './logo.svg';
 import './App.css';
 
@@ -124,8 +125,7 @@ class App extends Component {
       db: undefined,
       errorMsg: undefined,
       query: '',
-      resultCols: [],
-      resultRows: [],
+      result: undefined,
       status: 'init', // init, parsing-file, creating-db, loaded, running-query, error
     }
   }
@@ -146,6 +146,10 @@ class App extends Component {
       console.log(res[0].columns, res[0].values);
 
       this.setState({
+        result: {
+          cols: res[0].columns,
+          rows: res[0].values,
+        },
         status: 'loaded',
       });
     });
@@ -161,7 +165,9 @@ class App extends Component {
         <p className="App-intro">
           <LoadCSVButton />
         </p>
+        {this.state.status === 'error' ? <p>{this.state.errorMsg}</p> : null}
         {['loaded', 'running-query', 'error'].includes(this.state.status) ? <QueryForm /> : null}
+        {this.state.result !== undefined ? <Grid cols={this.state.result.cols} rows={this.state.result.rows} /> : null}
       </div>
     );
   }
