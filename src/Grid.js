@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
+import Table from 'react-bootstrap/lib/Table';
 
 const Grid = ({cols, rows}) => {
   return (
-    <table>
+    <Table responsive striped bordered condensed hover style={{width: 'auto'}}>
       <thead>
         <tr>
           {cols.map((col, i) => <th key={i}>{col}</th>)}
@@ -13,7 +14,7 @@ const Grid = ({cols, rows}) => {
           {row.map((val, j) => <td key={j}>{val}</td>)}
         </tr>)}
       </tbody>
-    </table>
+    </Table>
   );
 };
 

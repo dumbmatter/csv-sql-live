@@ -1,6 +1,12 @@
 import Papa from 'papaparse';
 import EventEmitter from 'events';
 import React, { Component } from 'react';
+import Button from 'react-bootstrap/lib/Button';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import Form from 'react-bootstrap/lib/Form';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import Navbar from 'react-bootstrap/lib/Navbar';
 import sql from 'sql.js';
 import Grid from './Grid';
 
@@ -76,15 +82,13 @@ const handleFile = async (e) => {
 
 const LoadCSVButton = () => {
   return (
-    <input
-        type="file"
-        onChange={handleFile}
-    />
+    <FormGroup>
+      <FormControl
+          type="file"
+          onChange={handleFile}
+      />
+    </FormGroup>
   );
-};
-
-const handleQuery = (e) => {
-  e.preventDefault();
 };
 
 class QueryForm extends Component {
@@ -104,13 +108,15 @@ class QueryForm extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input type="text" value={this.state.value} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+      <Form inline onSubmit={this.handleSubmit}>
+        <FormGroup>
+          <ControlLabel>SQL Query</ControlLabel>
+          {' '}
+          <FormControl value={this.state.value} onChange={this.handleChange} />
+        </FormGroup>
+        {' '}
+        <Button type="submit">Submit</Button>
+      </Form>
     );
   };
 };
@@ -155,16 +161,21 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">CSV SQL Live!</h1>
-        </header>
-        <p className="App-intro">
+      <div>
+        <Navbar>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href="#">CSV SQL Live</a>
+            </Navbar.Brand>
+          </Navbar.Header>
+        </Navbar>
+
+        <div className="container">
           <LoadCSVButton />
-        </p>
-        {this.state.status === 'error' ? <p>{this.state.errorMsg}</p> : null}
-        {['loaded', 'running-query', 'error'].includes(this.state.status) ? <QueryForm /> : null}
-        {this.state.result !== undefined ? <Grid cols={this.state.result.cols} rows={this.state.result.rows} /> : null}
+          {this.state.status === 'error' ? <p>{this.state.errorMsg}</p> : null}
+          {['loaded', 'running-query', 'error'].includes(this.state.status) ? <QueryForm /> : null}
+          {this.state.result !== undefined ? <Grid cols={this.state.result.cols} rows={this.state.result.rows} /> : null}
+        </div>
       </div>
     );
   }
