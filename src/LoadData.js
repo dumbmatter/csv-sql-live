@@ -128,7 +128,7 @@ class TextCSVForm extends Component {
           value={this.state.csvText}
         />
       </FormGroup>
-      <Button type="submit">Submit</Button>
+      <Button bsStyle="primary" type="submit">Submit</Button>
     </form>;
   }
 }

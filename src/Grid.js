@@ -2,6 +2,10 @@ import React from 'react';
 import Table from 'react-bootstrap/lib/Table';
 
 const Grid = ({cols, rows}) => {
+  if (cols.length === 0 && rows.length === 0) {
+    return <p>No rows returned.</p>;
+  }
+
   return (
     <Table responsive striped bordered condensed hover style={{width: 'auto'}}>
       <thead>

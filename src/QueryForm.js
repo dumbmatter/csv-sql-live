@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
-import ControlLabel from 'react-bootstrap/lib/ControlLabel';
-import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import emitter from './emitter';
@@ -9,29 +7,30 @@ import emitter from './emitter';
 class QueryForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: 'SELECT * FROM csv'};
+    this.state = {queryText: 'SELECT * FROM csv'};
   }
 
   handleChange = (e) => {
-    this.setState({value: e.target.value});
+    this.setState({queryText: e.target.value});
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    emitter.emit('runQuery', this.state.value);
+    emitter.emit('runQuery', this.state.queryText);
   }
 
   render() {
     return (
-      <Form inline onSubmit={this.handleSubmit}>
-        <FormGroup>
-          <ControlLabel>SQL Query</ControlLabel>
-          {' '}
-          <FormControl value={this.state.value} onChange={this.handleChange} />
+      <form onSubmit={this.handleSubmit}>
+        <FormGroup controlId="sql-query">
+          <FormControl
+            componentClass="textarea"
+            onChange={this.handleChange}
+            value={this.state.queryText}
+          />
         </FormGroup>
-        {' '}
-        <Button type="submit">Submit</Button>
-      </Form>
+        <Button bsStyle="primary" type="submit">Run Query</Button>
+      </form>
     );
   };
 };

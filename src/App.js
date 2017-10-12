@@ -42,13 +42,17 @@ class App extends Component {
       });
 
       const res = this.state.db.exec(query);
-      console.log(res[0].columns, res[0].values);
+
+      const result = res.length === 0 ? {
+        cols: [],
+        rows: [],
+      } : {
+        cols: res[res.length - 1].columns,
+        rows: res[res.length - 1].values,
+      };
 
       this.setState({
-        result: {
-          cols: res[0].columns,
-          rows: res[0].values,
-        },
+        result,
         status: 'loaded',
       });
     });
