@@ -136,12 +136,32 @@ class TextCSVForm extends Component {
 }
 
 const LoadData = () => {
-  return <div style={{fontSize: '18px'}}>
-    <div style={{textAlign: 'center'}}>
-      <LoadCSVButton />
-      <p style={{margin: '2em 0'}}>or</p>
+  return <div>
+    <div className="row">
+      <div className="col-xs-12 col-md-4">
+        <p>
+          With CSV SQL Live you can run SQL queries on data from a CSV file, right in your browser! Powered by <a href="http://papaparse.com/">Papa Parse</a>, <a href="https://github.com/kripken/sql.js/">sql.js</a>, and <a href="https://www.sqlite.org/">SQLite</a>.
+        </p>
+      </div>
+      <div className="col-xs-12 col-md-4">
+        <p>
+          <span className="text-danger">This is not perfectly accurate.</span> Some files will not parse correctly. If your too file is large, it might freeze your browser.
+        </p>
+      </div>
+      <div className="col-xs-12 col-md-4">
+        <p>
+          <span className="text-success">Your data will not leave your computer.</span> Processing is done client-side on your machine. Nothing is sent to any remote server.
+        </p>
+      </div>
     </div>
-    <TextCSVForm />
+
+    <div style={{fontSize: '18px', marginTop: '3em'}}>
+      <div style={{textAlign: 'center'}}>
+        <LoadCSVButton />
+        <p style={{margin: '2em 0'}}>or</p>
+      </div>
+      <TextCSVForm />
+    </div>
   </div>;
 };
 

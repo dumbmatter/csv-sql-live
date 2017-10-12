@@ -93,7 +93,7 @@ class App extends Component {
         <Navbar>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="#">CSV SQL Live</a>
+              CSV SQL Live
             </Navbar.Brand>
           </Navbar.Header>
           {this.state.status !== 'init' ? <Navbar.Form pullRight>
@@ -101,7 +101,7 @@ class App extends Component {
           </Navbar.Form> : null}
         </Navbar>
 
-        <div className="container">
+        <div className="container">        
           {this.state.status === 'init' ? <LoadData /> : null }
           {this.state.status === 'error' ? <p>{this.state.errorMsg}</p> : null}
           {['loaded', 'running-query', 'error'].includes(this.state.status) ? <QueryForm /> : null}
