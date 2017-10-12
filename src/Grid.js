@@ -1,25 +1,29 @@
-import React from 'react';
-import Table from 'react-bootstrap/lib/Table';
+import React, { Component } from 'react';
+import ReactDataGrid from 'react-data-grid';
 
-const Grid = ({cols, rows}) => {
-  if (cols.length === 0 && rows.length === 0) {
-    return <p>No rows returned.</p>;
+class Grid extends Component {
+  rowGetter = (i) => {
+    return this.props.rows[i].reduce((row, value, j) => {
+      row[this.props.cols[j]] = value;
+      return row;
+    }, {});
   }
 
-  return (
-    <Table responsive striped bordered condensed hover style={{width: 'auto'}}>
-      <thead>
-        <tr>
-          {cols.map((col, i) => <th key={i}>{col}</th>)}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, i) => <tr key={i}>
-          {row.map((val, j) => <td key={j}>{val}</td>)}
-        </tr>)}
-      </tbody>
-    </Table>
-  );
-};
+  render() {
+    if (this.props.cols.length === 0 && this.props.rows.length === 0) {
+      return <p>No rows returned.</p>;
+    }
+
+    return (
+      <ReactDataGrid
+        width={100}
+        columns={this.props.cols.map(col => {
+          return {key: col, name: col};
+        })}
+        rowGetter={this.rowGetter}
+        rowsCount={this.props.rows.length}
+      />);
+  }
+}
 
 export default Grid;

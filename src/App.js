@@ -6,6 +6,12 @@ import LoadData from './LoadData';
 import QueryForm from './QueryForm';
 import emitter from './emitter';
 
+import createReactClass from 'create-react-class';
+import PropTypes from 'prop-types';
+PropTypes.component = PropTypes.element;
+React.PropTypes = PropTypes;
+React.createClass = createReactClass;
+
 const initialState = {
   db: undefined,
   errorMsg: undefined,
@@ -63,7 +69,7 @@ class App extends Component {
       <div>
         <Navbar>
           <Navbar.Header>
-            <Navbar.Brand>
+            <Navbar.Brand style={{color: '#000'}}>
               CSV SQL Live
             </Navbar.Brand>
           </Navbar.Header>

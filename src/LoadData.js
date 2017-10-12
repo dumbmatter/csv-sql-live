@@ -128,7 +128,7 @@ class TextCSVForm extends Component {
           value={this.state.csvText}
         />
       </FormGroup>
-      <Button bsStyle="primary" type="submit">Submit</Button>
+      <Button bsStyle="primary" className="pull-right" type="submit">Submit</Button>
     </form>;
   }
 }
@@ -143,7 +143,7 @@ const LoadData = () => {
       </div>
       <div className="col-xs-12 col-md-4">
         <p>
-          <span className="text-danger">This is not perfectly accurate.</span> Some files will not parse correctly. If your too file is large, it might freeze your browser.
+          <span className="text-danger">This is not perfectly.</span> Some files will not parse correctly. If your too file is large, it might freeze your browser.
         </p>
       </div>
       <div className="col-xs-12 col-md-4">
