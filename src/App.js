@@ -9,6 +9,14 @@ import Grid from './Grid';
 import LoadData from './LoadData';
 import emitter from './emitter';
 
+const initialState = {
+  db: undefined,
+  errorMsg: undefined,
+  query: '',
+  result: undefined,
+  status: 'init', // init, parsing-data, creating-db, loaded, running-query, error
+};
+
 class QueryForm extends Component {
   constructor(props) {
     super(props);
@@ -43,14 +51,16 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      db: undefined,
-      errorMsg: undefined,
-      query: '',
-      result: undefined,
-      status: 'init', // init, parsing-data, creating-db, loaded, running-query, error
-    }
+    this.state = initialState;
   }
+
+  handleNewClick = () => {
+    if (this.state.db !== undefined) {
+      this.state.db.close();
+    }
+
+    this.setState(initialState);
+  };
 
   componentDidMount() {
     emitter.on('updateState', (state) => {
@@ -86,6 +96,9 @@ class App extends Component {
               <a href="#">CSV SQL Live</a>
             </Navbar.Brand>
           </Navbar.Header>
+          {this.state.status !== 'init' ? <Navbar.Form pullRight>
+            <Button bsStyle="danger" onClick={this.handleNewClick}>Load New CSV</Button>
+          </Navbar.Form> : null}
         </Navbar>
 
         <div className="container">
