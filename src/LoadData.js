@@ -119,21 +119,28 @@ class TextCSVForm extends Component {
 
   render() {
     return <form onSubmit={this.handleSubmit}>
-      <FormGroup>
-        <FormControl componentClass="textarea" value={this.state.csvText} onChange={this.handleChange} />
+      <FormGroup controlId="csv-text">
+        <ControlLabel>
+          Paste a CSV file here
+        </ControlLabel>
+        <FormControl
+          componentClass="textarea"
+          onChange={this.handleChange}
+          rows={10}
+          value={this.state.csvText}
+        />
       </FormGroup>
-      <Button type="submit" className="btn-primary">Submit</Button>
+      <Button type="submit">Submit</Button>
     </form>;
   }
 }
 
 const LoadData = () => {
-  return <div>
+  return <div style={{fontSize: '18px'}}>
     <div style={{textAlign: 'center'}}>
       <LoadCSVButton />
-      <p>or</p>
+      <p style={{margin: '2em 0'}}>or</p>
     </div>
-    <p>Paste a CSV file here</p>
     <TextCSVForm />
   </div>;
 };
