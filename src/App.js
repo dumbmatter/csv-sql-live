@@ -1,5 +1,3 @@
-import Papa from 'papaparse';
-import EventEmitter from 'events';
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
@@ -7,89 +5,9 @@ import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import Navbar from 'react-bootstrap/lib/Navbar';
-import sql from 'sql.js';
 import Grid from './Grid';
-
-const emitter = new EventEmitter();
-
-const parse = (file) => {
-  return new Promise((resolve, reject) => {
-    Papa.parse(file, {
-      complete: ({data}) => {
-        resolve(data);
-      },
-      error: reject,
-    });
-  })
-};
-
-const createDB = (data) => {
-  const db = new sql.Database();
-
-  const cols = data.shift();
-
-  const query = `CREATE TABLE csv (${cols.map((col) => `${col} TEXT`).join(',')});`;
-  db.run(query);
-
-  const insertStmt = db.prepare(`INSERT INTO csv VALUES (${cols.map((val) => '?').join(',')})`);
-  for (const row of data) {
-    if (row.length !== cols.length) {
-      console.log('skipping row', row);
-      continue;
-    }
-    
-    insertStmt.run(row);
-  }
-  insertStmt.free();
-
-  return db;
-};
-
-const handleFile = async (e) => {
-  try {
-    emitter.emit('updateState', {
-      status: 'parsing-file',
-    });
-    const file = e.target.files[0];
-
-    if (!file) {
-        return;
-    }
-
-    const data = await parse(file);
-
-    emitter.emit('updateState', {
-      status: 'creating-db',
-    });
-
-    const db = createDB(data);
-
-    const res = db.exec("SELECT * FROM csv");
-    console.log(res[0].columns, res[0].values);
-
-    emitter.emit('updateState', {
-      db,
-      status: 'loaded',
-    });
-  } catch (err) {
-    console.error(err);
-    emitter.emit('updateState', {
-      errorMsg: err.message,
-      status: 'error',
-    });
-  }
-};
-
-const LoadCSVButton = () => {
-  return (
-    <FormGroup>
-      <FormControl
-          type="file"
-          onChange={handleFile}
-      />
-    </FormGroup>
-  );
-};
+import LoadData from './LoadData';
+import emitter from './emitter';
 
 class QueryForm extends Component {
   constructor(props) {
@@ -130,7 +48,7 @@ class App extends Component {
       errorMsg: undefined,
       query: '',
       result: undefined,
-      status: 'init', // init, parsing-file, creating-db, loaded, running-query, error
+      status: 'init', // init, parsing-data, creating-db, loaded, running-query, error
     }
   }
 
@@ -171,7 +89,7 @@ class App extends Component {
         </Navbar>
 
         <div className="container">
-          <LoadCSVButton />
+          {this.state.status === 'init' ? <LoadData /> : null }
           {this.state.status === 'error' ? <p>{this.state.errorMsg}</p> : null}
           {['loaded', 'running-query', 'error'].includes(this.state.status) ? <QueryForm /> : null}
           {this.state.result !== undefined ? <Grid cols={this.state.result.cols} rows={this.state.result.rows} /> : null}
