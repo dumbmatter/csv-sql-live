@@ -45,8 +45,6 @@ const createDB = (data) => {
     db,
     status: 'loaded',
   });
-
-  return db;
 };
 
 const handleFile = async (e) => {
@@ -61,7 +59,7 @@ const handleFile = async (e) => {
     }
 
     const data = await parse(file);
-    const db = createDB(data);
+    createDB(data);
 
   } catch (err) {
     console.error(err);
@@ -106,7 +104,7 @@ class TextCSVForm extends Component {
       });
 
       const data = await parse(this.state.csvText);
-      const db = createDB(data);
+      createDB(data);
 
     } catch (err) {
       console.error(err);

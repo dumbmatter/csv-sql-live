@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
-import ControlLabel from 'react-bootstrap/lib/ControlLabel';
-import Form from 'react-bootstrap/lib/Form';
-import FormControl from 'react-bootstrap/lib/FormControl';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Grid from './Grid';
 import LoadData from './LoadData';
+import QueryForm from './QueryForm';
 import emitter from './emitter';
 
 const initialState = {
@@ -15,36 +12,6 @@ const initialState = {
   query: '',
   result: undefined,
   status: 'init', // init, parsing-data, creating-db, loaded, running-query, error
-};
-
-class QueryForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {value: 'SELECT * FROM csv'};
-  }
-
-  handleChange = (e) => {
-    this.setState({value: e.target.value});
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault();
-    emitter.emit('runQuery', this.state.value);
-  }
-
-  render() {
-    return (
-      <Form inline onSubmit={this.handleSubmit}>
-        <FormGroup>
-          <ControlLabel>SQL Query</ControlLabel>
-          {' '}
-          <FormControl value={this.state.value} onChange={this.handleChange} />
-        </FormGroup>
-        {' '}
-        <Button type="submit">Submit</Button>
-      </Form>
-    );
-  };
 };
 
 class App extends Component {
