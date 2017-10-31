@@ -4,10 +4,6 @@ Todo:
 
 - handle weird column names, and display converted column names
 - fancy grid features
-  - filters
-  - sorting
+  - filters http://adazzle.github.io/react-data-grid/examples.html#/filterable-grid
 - no external assets
-- github link
-- test error handling (like invalid file/query)
-- favicon
 - analytics

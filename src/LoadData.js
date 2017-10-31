@@ -65,7 +65,7 @@ const handleFile = async (e) => {
     console.error(err);
     emitter.emit('updateState', {
       errorMsg: err.message,
-      status: 'error',
+      status: 'loading-error',
     });
   }
 };
@@ -107,10 +107,9 @@ class TextCSVForm extends Component {
       createDB(data);
 
     } catch (err) {
-      console.error(err);
       emitter.emit('updateState', {
         errorMsg: err.message,
-        status: 'error',
+        status: 'loading-error',
       });
     }
   }
@@ -143,7 +142,7 @@ const LoadData = () => {
       </div>
       <div className="col-xs-12 col-md-4">
         <p>
-          <span className="text-danger">This is not perfectly.</span> Some files will not parse correctly. If your too file is large, it might freeze your browser.
+          <span className="text-danger">This is not perfect.</span> Some files will not parse correctly. If your too file is large, it might freeze your browser.
         </p>
       </div>
       <div className="col-xs-12 col-md-4">

@@ -17,7 +17,7 @@ const initialState = {
   errorMsg: undefined,
   query: '',
   result: undefined,
-  status: 'init', // init, parsing-data, creating-db, loaded, running-query, error
+  status: 'init', // init, parsing-data, creating-db, loaded, loading-error, running-query, query-error
 };
 
 class App extends Component {
@@ -37,30 +37,35 @@ class App extends Component {
 
   componentDidMount() {
     emitter.on('updateState', (state) => {
-      console.log('updateState', state);
       this.setState(state);
     });
 
     emitter.on('runQuery', (query) => {
-      console.log('runQuery', query);
       this.setState({
         status: 'running-query',
       });
 
-      const res = this.state.db.exec(query);
+      try {
+        const res = this.state.db.exec(query);
 
-      const result = res.length === 0 ? {
-        cols: [],
-        rows: [],
-      } : {
-        cols: res[res.length - 1].columns,
-        rows: res[res.length - 1].values,
-      };
+        const result = res.length === 0 ? {
+          cols: [],
+          rows: [],
+        } : {
+          cols: res[res.length - 1].columns,
+          rows: res[res.length - 1].values,
+        };
 
-      this.setState({
-        result,
-        status: 'loaded',
-      });
+        this.setState({
+          result,
+          status: 'loaded',
+        });
+      } catch (err) {
+        this.setState({
+          errorMsg: err.message,
+          status: 'query-error',
+        });
+      }
     });
   }
 
@@ -78,11 +83,18 @@ class App extends Component {
           </Navbar.Form> : null}
         </Navbar>
 
-        <div className="container">        
-          {this.state.status === 'init' ? <LoadData /> : null }
-          {this.state.status === 'error' ? <p>{this.state.errorMsg}</p> : null}
-          {['loaded', 'running-query', 'error'].includes(this.state.status) ? <QueryForm /> : null}
+        <div className="container">       
+          {['loaded', 'running-query', 'query-error'].includes(this.state.status) ? <QueryForm /> : null}
+          {['loading-error', 'query-error'].includes(this.state.status) ? <p className="alert alert-danger"><b>Error!</b> {this.state.errorMsg}</p> : null}
+          {['init', 'loading-error'].includes(this.state.status) ? <LoadData /> : null }
           {this.state.result !== undefined ? <Grid cols={this.state.result.cols} rows={this.state.result.rows} /> : null}
+
+          <div className="clearfix" />
+          <hr />
+
+          <footer>
+            <p><a href="https://github.com/dumbmatter/csv-sql-live">View on GitHub</a></p>
+          </footer>
         </div>
       </div>
     );

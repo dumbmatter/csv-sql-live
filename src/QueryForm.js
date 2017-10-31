@@ -30,7 +30,7 @@ class QueryForm extends Component {
             value={this.state.queryText}
           />
           <Button bsStyle="primary" style={{marginTop: '0.5em'}} className="pull-right" type="submit">Run Query</Button>
-          <HelpBlock>Any <a href="https://sqlite.org/lang.html">valid SQLite query</a> is supported.</HelpBlock>
+          <HelpBlock>Any <a href="https://sqlite.org/lang.html" target="_blank" rel="noopener noreferrer">valid SQLite query</a> is supported.</HelpBlock>
         </FormGroup>
       </form>
     );
