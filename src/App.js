@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
+import Modal from 'react-bootstrap/lib/Modal';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Grid from './Grid';
 import LoadData from './LoadData';
@@ -11,6 +12,7 @@ const initialState = {
   errorMsg: undefined,
   query: '',
   result: undefined,
+  showModal: true,
   status: 'init', // init, parsing-data, creating-db, loaded, loading-error, running-query, query-error
 };
 
@@ -21,12 +23,16 @@ class App extends Component {
     this.state = initialState;
   }
 
-  handleNewClick = () => {
-    if (this.state.db !== undefined) {
-      this.state.db.close();
-    }
+  closeModal = () => {
+    this.setState({
+      showModal: false,
+    });
+  };
 
-    this.setState(initialState);
+  handleNewClick = () => {
+    this.setState({
+      showModal: true,
+    });
   };
 
   componentDidMount() {
@@ -81,7 +87,6 @@ class App extends Component {
         <div className="container">       
           {['loaded', 'running-query', 'query-error'].includes(this.state.status) ? <QueryForm /> : null}
           {['loading-error', 'query-error'].includes(this.state.status) ? <p className="alert alert-danger"><b>Error!</b> {this.state.errorMsg}</p> : null}
-          {['init', 'loading-error'].includes(this.state.status) ? <LoadData /> : null }
           {this.state.result !== undefined ? <Grid cols={this.state.result.cols} rows={this.state.result.rows} /> : null}
 
           <div className="clearfix" />
@@ -91,6 +96,15 @@ class App extends Component {
             <p><a href="https://github.com/dumbmatter/csv-sql-live">View on GitHub</a></p>
           </footer>
         </div>
+
+        <Modal show={this.state.showModal} onHide={this.closeModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add New CSV</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <LoadData />
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }
