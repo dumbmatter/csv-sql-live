@@ -93,14 +93,15 @@ class App extends Component {
           <hr />
 
           <footer>
+            <p>Powered by <a href="http://papaparse.com/">Papa Parse</a>, <a href="https://github.com/kripken/sql.js/">sql.js</a>, and <a href="https://www.sqlite.org/">SQLite</a>.</p>
             <p><a href="https://github.com/dumbmatter/csv-sql-live">View on GitHub</a></p>
           </footer>
         </div>
 
         <Modal show={this.state.showModal} onHide={this.closeModal}>
-          <Modal.Header closeButton>
+          {this.state.status !== "init" ? <Modal.Header closeButton>
             <Modal.Title>Add New CSV</Modal.Title>
-          </Modal.Header>
+          </Modal.Header> : null}
           <Modal.Body>
             <LoadData />
           </Modal.Body>
