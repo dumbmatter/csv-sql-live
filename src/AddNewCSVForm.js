@@ -85,54 +85,7 @@ const LoadCSVButton = () => {
   );
 };
 
-class TextCSVForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {csvText: ''};
-  }
-
-  handleChange = (e) => {
-    this.setState({csvText: e.target.value});
-  }
-
-  handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      emitter.emit('updateState', {
-        status: 'parsing-data',
-      });
-
-      const data = await parse(this.state.csvText);
-      createDB(data);
-
-    } catch (err) {
-      emitter.emit('updateState', {
-        errorMsg: err.message,
-        status: 'loading-error',
-      });
-    }
-  }
-
-  render() {
-    return <form onSubmit={this.handleSubmit}>
-      <FormGroup controlId="csv-text">
-        <ControlLabel>
-          Paste a CSV file here
-        </ControlLabel>
-        <FormControl
-          componentClass="textarea"
-          onChange={this.handleChange}
-          rows={10}
-          value={this.state.csvText}
-        />
-      </FormGroup>
-      <Button bsStyle="primary" className="pull-right" type="submit">Submit</Button>
-    </form>;
-  }
-}
-
-const LoadData = () => {
+const AddNewCSVForm = () => {
   return <div>
     <div className="row">
       <div className="col-xs-12 col-md-6">
@@ -150,11 +103,9 @@ const LoadData = () => {
     <div style={{fontSize: '18px', marginTop: '3em'}}>
       <div style={{textAlign: 'center'}}>
         <LoadCSVButton />
-        <p style={{margin: '2em 0'}}>or</p>
       </div>
-      <TextCSVForm />
     </div>
   </div>;
 };
 
-export default LoadData;
+export default AddNewCSVForm;

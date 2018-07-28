@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import Navbar from 'react-bootstrap/lib/Navbar';
+import AddNewCSVForm from './AddNewCSVForm';
 import Grid from './Grid';
-import LoadData from './LoadData';
 import QueryForm from './QueryForm';
 import emitter from './emitter';
 
@@ -98,12 +98,12 @@ class App extends Component {
           </footer>
         </div>
 
-        <Modal show={this.state.showModal} onHide={this.closeModal}>
+        <Modal bsSize="large" show={this.state.showModal} onHide={this.closeModal}>
           {this.state.status !== "init" ? <Modal.Header closeButton>
             <Modal.Title>Add New CSV</Modal.Title>
           </Modal.Header> : null}
           <Modal.Body>
-            <LoadData />
+            <AddNewCSVForm />
           </Modal.Body>
         </Modal>
       </div>
