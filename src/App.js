@@ -78,9 +78,10 @@ class App extends Component {
               CSV SQL Live
             </Navbar.Brand>
           </Navbar.Header>
-          {this.state.status !== 'init' ? <Navbar.Form pullRight>
-            <Button bsStyle="danger" onClick={this.handleNewClick}>Load New CSV</Button>
-          </Navbar.Form> : null}
+          <Navbar.Form pullRight>
+            <Button style={{marginRight: "0.5em"}}>Loaded Table Info</Button>
+            <Button bsStyle="danger" onClick={this.handleNewClick}>Add New CSV</Button>
+          </Navbar.Form>
         </Navbar>
 
         <div className="container">       
