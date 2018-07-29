@@ -98,21 +98,21 @@ class App extends Component {
       <div className="flex-wrapper">
         <nav className="navbar navbar-default">
           <div className="container">
-            <div className="navbar-header">
-              <span className="navbar-brand" style={{ color: "#000" }}>
-                CSV SQL Live
-              </span>
-            </div>
-            <form className="navbar-form navbar-right">
+            <span className="navbar-brand" style={{ color: "#000" }}>
+              CSV SQL Live
+            </span>
+            <form className="pull-right" style={{ margin: "8px 0" }}>
               <Button
                 style={{ marginRight: "0.5em" }}
                 onClick={this.handleTablesClick}
                 disabled={this.state.status === "init"}
               >
-                Loaded Tables
+                <span className="hidden-xs">Loaded Tables</span>
+                <span className="visible-xs">Tables</span>
               </Button>
               <Button bsStyle="danger" onClick={this.handleAddClick}>
-                Add New CSV
+                <span className="hidden-xs">Add New CSV</span>
+                <span className="visible-xs">Add CSV</span>
               </Button>
             </form>
           </div>
