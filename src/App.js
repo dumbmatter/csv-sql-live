@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Button from "react-bootstrap/lib/Button";
 import Modal from "react-bootstrap/lib/Modal";
-import Navbar from "react-bootstrap/lib/Navbar";
 import AddNewCSVForm from "./AddNewCSVForm";
 import Grid from "./Grid";
 import LoadedTables from "./LoadedTables";
@@ -97,23 +96,27 @@ class App extends Component {
   render() {
     return (
       <div className="flex-wrapper">
-        <Navbar>
-          <Navbar.Header>
-            <Navbar.Brand style={{ color: "#000" }}>CSV SQL Live</Navbar.Brand>
-          </Navbar.Header>
-          <Navbar.Form pullRight>
-            <Button
-              style={{ marginRight: "0.5em" }}
-              onClick={this.handleTablesClick}
-              disabled={this.state.status === "init"}
-            >
-              Loaded Tables
-            </Button>
-            <Button bsStyle="danger" onClick={this.handleAddClick}>
-              Add New CSV
-            </Button>
-          </Navbar.Form>
-        </Navbar>
+        <nav className="navbar navbar-default">
+          <div className="container">
+            <div className="navbar-header">
+              <span className="navbar-brand" style={{ color: "#000" }}>
+                CSV SQL Live
+              </span>
+            </div>
+            <form className="navbar-form navbar-right">
+              <Button
+                style={{ marginRight: "0.5em" }}
+                onClick={this.handleTablesClick}
+                disabled={this.state.status === "init"}
+              >
+                Loaded Tables
+              </Button>
+              <Button bsStyle="danger" onClick={this.handleAddClick}>
+                Add New CSV
+              </Button>
+            </form>
+          </div>
+        </nav>
 
         <div className="container above-footer">
           <QueryForm status={this.state.status} />
