@@ -5827,6 +5827,12 @@ react-bootstrap@^0.32.1:
     uncontrollable "^4.1.0"
     warning "^3.0.0"
 
+react-data-grid-addons@^4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/react-data-grid-addons/-/react-data-grid-addons-4.0.8.tgz#a2b2b8803942fab78edac5f65f4964f24024d11b"
+  dependencies:
+    react-data-grid "^4.0.8"
+
 react-data-grid@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/react-data-grid/-/react-data-grid-4.0.8.tgz#e67f73dde0d3c61bb38e41425603698ede442d18"
