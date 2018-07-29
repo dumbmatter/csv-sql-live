@@ -93,7 +93,7 @@ class App extends Component {
         </Navbar>
 
         <div className="container">       
-          {['loaded', 'running-query', 'query-error'].includes(this.state.status) ? <QueryForm /> : null}
+          <QueryForm status={this.state.status} />
           {['loading-error', 'query-error'].includes(this.state.status) ? <p className="alert alert-danger"><b>Error!</b> {this.state.errorMsg}</p> : null}
           {this.state.result !== undefined ? <Grid cols={this.state.result.cols} rows={this.state.result.rows} /> : null}
 

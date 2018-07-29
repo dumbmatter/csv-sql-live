@@ -37,6 +37,10 @@ class QueryForm extends Component {
   }
 
   render() {
+    if (!['loaded', 'running-query', 'query-error'].includes(this.props.status)) {
+      return null;
+    }
+
     return (
       <form onSubmit={this.handleSubmit} style={{marginBottom: '3em'}}>
         <FormGroup controlId="sql-query">
