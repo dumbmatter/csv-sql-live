@@ -30,7 +30,7 @@ const createTable = (db, data, tableName) => {
 
   const cols = data.shift();
   const query = `CREATE TABLE "${tableName}" (${cols
-    .map(col => `${col} TEXT`)
+    .map(col => `"${col}" TEXT`)
     .join(",")});`;
   db.run(query);
 
