@@ -118,7 +118,7 @@ class App extends Component {
           </div>
         </nav>
 
-        <div className="container above-footer">
+        <div className="container above-footer full-width">
           <QueryForm status={this.state.status} />
           {this.state.status === "init" ? (
             <p
@@ -142,11 +142,11 @@ class App extends Component {
           ) : null}
         </div>
 
-        <div className="clearfix container">
+        <div className="container full-width">
           <hr />
 
           <footer>
-            <p className="pull-right">
+            <p className="pull-right hidden-xs">
               <a
                 href="https://github.com/dumbmatter/csv-sql-live"
                 target="_blank"
@@ -178,6 +178,15 @@ class App extends Component {
               >
                 SQLite
               </a>.
+            </p>
+            <p className="visible-xs">
+              <a
+                href="https://github.com/dumbmatter/csv-sql-live"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on GitHub
+              </a>
             </p>
           </footer>
         </div>
