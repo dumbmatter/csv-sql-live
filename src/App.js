@@ -107,7 +107,7 @@ class App extends Component {
         </div>
 
         <Modal show={this.state.showModal} onHide={this.closeModal}>
-          <AddNewCSVForm closeModal={this.closeModal} />
+          <AddNewCSVForm closeModal={this.closeModal} db={this.state.db} />
         </Modal>
       </div>
     );

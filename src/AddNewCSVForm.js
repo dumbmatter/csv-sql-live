@@ -19,12 +19,14 @@ const parse = (file) => {
   })
 };
 
-const createDB = (data, tableName) => {
+const createTable = (db, data, tableName) => {
   emitter.emit('updateState', {
     status: 'creating-db',
   });
 
-  const db = new sql.Database();
+  if (!db) {
+    db = new sql.Database();
+  }
 
   const cols = data.shift();
 
@@ -91,7 +93,7 @@ class AddNewCSVForm extends Component {
       }
 
       const data = await parse(this.state.file);
-      const db = createDB(data, this.state.tableName);
+      const db = createTable(this.props.db, data, this.state.tableName);
 
       emitter.emit('updateState', {
         db,
