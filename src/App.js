@@ -26,11 +26,9 @@ class App extends Component {
   }
 
   closeAddModal = () => {
-    if (this.state.status !== "init") {
-      this.setState({
-        showAddModal: false
-      });
-    }
+    this.setState({
+      showAddModal: false
+    });
   };
 
   closeTablesModal = () => {
@@ -58,7 +56,6 @@ class App extends Component {
 
     try {
       const res = this.state.db.exec(query);
-      console.log("res", res);
       const result =
         res.length === 0
           ? {
@@ -69,7 +66,6 @@ class App extends Component {
               cols: res[res.length - 1].columns,
               rows: res[res.length - 1].values
             };
-      console.log("result", result);
 
       this.setState({
         result,
@@ -119,6 +115,18 @@ class App extends Component {
 
         <div className="container above-footer">
           <QueryForm status={this.state.status} />
+          {this.state.status === "init" ? (
+            <p
+              style={{
+                fontSize: "18px",
+                marginTop: "6em",
+                textAlign: "center"
+              }}
+            >
+              To get started, first you need to{" "}
+              <a onClick={this.handleAddClick}>load a CSV file</a>.
+            </p>
+          ) : null}
           {["query-error"].includes(this.state.status) ? (
             <p className="alert alert-danger">
               <b>Error!</b> {this.state.errorMsg}
