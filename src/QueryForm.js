@@ -37,9 +37,7 @@ class QueryForm extends Component {
   }
 
   render() {
-    if (
-      !["loaded", "running-query", "query-error"].includes(this.props.status)
-    ) {
+    if (this.props.status === "init") {
       return null;
     }
 
@@ -50,12 +48,14 @@ class QueryForm extends Component {
             componentClass="textarea"
             onChange={this.handleChange}
             value={this.state.queryText}
+            disabled={this.props.status !== "loaded"}
           />
           <Button
             bsStyle="primary"
             style={{ marginTop: "0.5em" }}
             className="pull-right"
             type="submit"
+            disabled={this.props.status !== "loaded"}
           >
             Run Query
           </Button>

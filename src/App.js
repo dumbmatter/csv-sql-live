@@ -105,6 +105,7 @@ class App extends Component {
             <Button
               style={{ marginRight: "0.5em" }}
               onClick={this.handleTablesClick}
+              disabled={this.state.status === "init"}
             >
               Loaded Tables
             </Button>
