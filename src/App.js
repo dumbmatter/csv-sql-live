@@ -13,7 +13,7 @@ const initialState = {
   query: '',
   result: undefined,
   showModal: true,
-  status: 'init', // init, parsing-data, creating-db, loaded, loading-error, running-query, query-error
+  status: 'init', // init, parsing-data, creating-db, loaded, running-query, query-error
 };
 
 class App extends Component {
@@ -94,7 +94,7 @@ class App extends Component {
 
         <div className="container">       
           <QueryForm status={this.state.status} />
-          {['loading-error', 'query-error'].includes(this.state.status) ? <p className="alert alert-danger"><b>Error!</b> {this.state.errorMsg}</p> : null}
+          {['query-error'].includes(this.state.status) ? <p className="alert alert-danger"><b>Error!</b> {this.state.errorMsg}</p> : null}
           {this.state.result !== undefined ? <Grid cols={this.state.result.cols} rows={this.state.result.rows} /> : null}
 
           <div className="clearfix" />
@@ -107,7 +107,7 @@ class App extends Component {
         </div>
 
         <Modal show={this.state.showModal} onHide={this.closeModal}>
-          <AddNewCSVForm closeModal={this.closeModal} db={this.state.db} />
+          <AddNewCSVForm closeModal={this.closeModal} db={this.state.db} status={this.state.status} />
         </Modal>
       </div>
     );

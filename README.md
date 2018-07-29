@@ -2,7 +2,7 @@
 
 Todo:
 
-- show errors when loading new file within modal, and delete table on error (or tx)
+- delete table on error (or tx)
 - handle weird column names, and display converted column names
   - table names too
   - some library to do it?

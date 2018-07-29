@@ -61,6 +61,7 @@ class AddNewCSVForm extends Component {
     super(props);
 
     this.state = {
+      errorMsg: undefined,
       file: undefined,
       fileName: undefined,
       tableName: "",
@@ -83,6 +84,8 @@ class AddNewCSVForm extends Component {
   };
 
   handleSubmit = async (e) => {
+    const initialStatus = this.props.status;
+
     try {
       emitter.emit('updateState', {
         status: 'parsing-data',
@@ -104,9 +107,11 @@ class AddNewCSVForm extends Component {
       this.props.closeModal();
     } catch (err) {
       console.error(err);
-      emitter.emit('updateState', {
+      this.setState({
         errorMsg: err.message,
-        status: 'loading-error',
+      });
+      emitter.emit('updateState', {
+        status: initialStatus,
       });
     }
   };
@@ -162,6 +167,8 @@ class AddNewCSVForm extends Component {
             />
           </FormGroup>
         </div>
+
+        {this.state.errorMsg !== undefined ? <p className="alert alert-danger" style={{margin: '3em 0 0 0'}}><b>Error!</b> {this.state.errorMsg}</p> : null}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={this.props.closeModal}>Close</Button>
