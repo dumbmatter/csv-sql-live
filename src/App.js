@@ -98,13 +98,8 @@ class App extends Component {
           </footer>
         </div>
 
-        <Modal bsSize="large" show={this.state.showModal} onHide={this.closeModal}>
-          {this.state.status !== "init" ? <Modal.Header closeButton>
-            <Modal.Title>Add New CSV</Modal.Title>
-          </Modal.Header> : null}
-          <Modal.Body>
-            <AddNewCSVForm />
-          </Modal.Body>
+        <Modal show={this.state.showModal} onHide={this.closeModal}>
+          <AddNewCSVForm closeModal={this.closeModal} />
         </Modal>
       </div>
     );

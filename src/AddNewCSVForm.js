@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/lib/Button';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
+import Modal from 'react-bootstrap/lib/Modal';
 import sql from 'sql.js';
 import emitter from './emitter';
 
@@ -18,7 +19,7 @@ const parse = (file) => {
   })
 };
 
-const createDB = (data) => {
+const createDB = (data, tableName) => {
   emitter.emit('updateState', {
     status: 'creating-db',
   });
@@ -27,10 +28,12 @@ const createDB = (data) => {
 
   const cols = data.shift();
 
-  const query = `CREATE TABLE csv (${cols.map((col) => `${col} TEXT`).join(',')});`;
+  const query = `CREATE TABLE "${tableName}" (${cols.map((col) => `${col} TEXT`).join(',')});`;
+console.log(query)
   db.run(query);
 
-  const insertStmt = db.prepare(`INSERT INTO csv VALUES (${cols.map((val) => '?').join(',')})`);
+  const insertStmt = db.prepare(`INSERT INTO "${tableName}" VALUES (${cols.map((val) => '?').join(',')})`);
+console.log(insertStmt)
   for (const row of data) {
     if (row.length !== cols.length) {
       console.log('skipping row', row);
@@ -47,65 +50,122 @@ const createDB = (data) => {
   });
 };
 
-const handleFile = async (e) => {
-  try {
-    emitter.emit('updateState', {
-      status: 'parsing-data',
-    });
-    const file = e.target.files[0];
+const getTableName = (fileName) => {
+  const parts = fileName.split(".");
+  if (parts.length < 2) {
+    return fileName;
+  }
 
+  return parts.slice(0, -1).join(".");
+}
+
+class AddNewCSVForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      file: undefined,
+      fileName: undefined,
+      tableName: "",
+    };
+  }
+
+  handleFile = (e) => {
+    const file = e.target.files[0];
     if (!file) {
         return;
     }
 
-    const data = await parse(file);
-    createDB(data);
-
-  } catch (err) {
-    console.error(err);
-    emitter.emit('updateState', {
-      errorMsg: err.message,
-      status: 'loading-error',
+    // http://stackoverflow.com/q/4851595/786644
+    const fileName = e.target.value.replace('C:\\fakepath\\', '');
+    this.setState({
+      file,
+      fileName,
+      tableName: getTableName(fileName),
     });
+  };
+
+  handleSubmit = async (e) => {
+    try {
+      emitter.emit('updateState', {
+        status: 'parsing-data',
+      });
+
+      if (!this.state.file) {
+          return;
+      }
+
+      const data = await parse(this.state.file);
+      createDB(data, this.state.tableName);
+
+      this.props.closeModal();
+    } catch (err) {
+      console.error(err);
+      emitter.emit('updateState', {
+        errorMsg: err.message,
+        status: 'loading-error',
+      });
+    }
+  };
+
+  handleTableNameChange = async (e) => {
+    this.setState({ tableName: e.target.value });
+  };
+
+  render() {
+    return <div>
+      <Modal.Header closeButton>
+        <Modal.Title>Add New CSV</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="row">
+          <div className="col-xs-12 col-md-6">
+            <p>
+              With CSV SQL Live you can <strong className="text-success">run SQL queries on data from CSV files</strong>, right in your browser!
+            </p>
+          </div>
+          <div className="col-xs-12 col-md-6">
+            <p>
+              <strong className="text-success">Your data will not leave your computer.</strong> Processing is done in your browser. No servers involved.
+            </p>
+          </div>
+        </div>
+
+        <div style={{marginTop: '3em'}}>
+          <FormGroup>
+            <ControlLabel className="btn btn-primary">
+              Select CSV File
+              <FormControl
+                  type="file"
+                  onChange={this.handleFile}
+                  style={{display: 'none'}}
+              />
+            </ControlLabel>
+            <span style={{marginLeft: "1em"}}>
+              {this.state.fileName}
+            </span>
+          </FormGroup>
+        </div>
+
+        <div style={{marginTop: '3em'}}>
+          <FormGroup>
+            <ControlLabel>
+              Table Name
+            </ControlLabel>
+            <FormControl
+                type="input"
+                onChange={this.handleTableNameChange}
+                value={this.state.tableName}
+            />
+          </FormGroup>
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={this.props.closeModal}>Close</Button>
+        <Button bsStyle="primary" disabled={!this.state.fileName || !this.state.tableName} onClick={this.handleSubmit}>Add New CSV</Button>
+      </Modal.Footer>
+    </div>;
   }
-};
-
-const LoadCSVButton = () => {
-  return (
-    <FormGroup>
-      <ControlLabel className="btn btn-primary btn-lg">
-        Select CSV File
-        <FormControl
-            type="file"
-            onChange={handleFile}
-            style={{display: 'none'}}
-        />
-      </ControlLabel>
-    </FormGroup>
-  );
-};
-
-const AddNewCSVForm = () => {
-  return <div>
-    <div className="row">
-      <div className="col-xs-12 col-md-6">
-        <p>
-          With CSV SQL Live you can <strong className="text-success">run SQL queries on data from CSV files</strong>, right in your browser!
-        </p>
-      </div>
-      <div className="col-xs-12 col-md-6">
-        <p>
-          <strong className="text-success">Your data will not leave your computer.</strong> Processing is done in your browser. No servers involved.
-        </p>
-      </div>
-    </div>
-
-    <div style={{fontSize: '18px', marginTop: '3em'}}>
-      <div style={{textAlign: 'center'}}>
-        <LoadCSVButton />
-      </div>
-    </div>
-  </div>;
 };
 
 export default AddNewCSVForm;
