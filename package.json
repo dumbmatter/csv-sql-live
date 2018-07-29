@@ -8,10 +8,22 @@
     "react-bootstrap": "^0.32.1",
     "react-data-grid": "^4.0.8",
     "react-dom": "^16.0.0",
-    "react-scripts": "^1.1.4",
     "sql.js": "^0.5.0"
   },
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.0",
+    "prettier": "^1.13.7",
+    "react-scripts": "^1.1.4"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json,css}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "scripts": {
+    "precommit": "lint-staged",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

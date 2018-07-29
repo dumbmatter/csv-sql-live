@@ -1,60 +1,79 @@
-import React, { Component } from 'react';
-import Button from 'react-bootstrap/lib/Button';
-import FormControl from 'react-bootstrap/lib/FormControl';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import HelpBlock from 'react-bootstrap/lib/HelpBlock';
-import emitter from './emitter';
+import React, { Component } from "react";
+import Button from "react-bootstrap/lib/Button";
+import FormControl from "react-bootstrap/lib/FormControl";
+import FormGroup from "react-bootstrap/lib/FormGroup";
+import HelpBlock from "react-bootstrap/lib/HelpBlock";
+import emitter from "./emitter";
 
 class QueryForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {queryText: ''};
+    this.state = { queryText: "" };
   }
 
-  handleChange = (e) => {
-    this.setState({queryText: e.target.value});
-  }
+  handleChange = e => {
+    this.setState({ queryText: e.target.value });
+  };
 
-  handleSubmit = (e) => {
+  handleSubmit = e => {
     e.preventDefault();
-    emitter.emit('runQuery', this.state.queryText);
-  }
+    emitter.emit("runQuery", this.state.queryText);
+  };
 
-  newTable = (tableName) => {
+  newTable = tableName => {
     if (this.state.queryText === "") {
       this.setState({
-        queryText: `SELECT * FROM "${tableName}"`,
+        queryText: `SELECT * FROM "${tableName}"`
       });
     }
   };
 
   componentDidMount() {
-    emitter.addListener('newTable', this.newTable);
+    emitter.addListener("newTable", this.newTable);
   }
 
   componentWillUnmount() {
-    emitter.removeListener('newTable', this.newTable);
+    emitter.removeListener("newTable", this.newTable);
   }
 
   render() {
-    if (!['loaded', 'running-query', 'query-error'].includes(this.props.status)) {
+    if (
+      !["loaded", "running-query", "query-error"].includes(this.props.status)
+    ) {
       return null;
     }
 
     return (
-      <form onSubmit={this.handleSubmit} style={{marginBottom: '3em'}}>
+      <form onSubmit={this.handleSubmit} style={{ marginBottom: "3em" }}>
         <FormGroup controlId="sql-query">
           <FormControl
             componentClass="textarea"
             onChange={this.handleChange}
             value={this.state.queryText}
           />
-          <Button bsStyle="primary" style={{marginTop: '0.5em'}} className="pull-right" type="submit">Run Query</Button>
-          <HelpBlock>Any <a href="https://sqlite.org/lang.html" target="_blank" rel="noopener noreferrer">valid SQLite query</a> is supported.</HelpBlock>
+          <Button
+            bsStyle="primary"
+            style={{ marginTop: "0.5em" }}
+            className="pull-right"
+            type="submit"
+          >
+            Run Query
+          </Button>
+          <HelpBlock>
+            Any{" "}
+            <a
+              href="https://sqlite.org/lang.html"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              valid SQLite query
+            </a>{" "}
+            is supported.
+          </HelpBlock>
         </FormGroup>
       </form>
     );
-  };
-};
+  }
+}
 
 export default QueryForm;

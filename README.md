@@ -5,7 +5,6 @@ Todo:
 - handle weird column names, and display converted column names
   - table names too
   - some library to do it?
-- way to view tables loaded currently and schema (maybe another button)
 
 - no external assets
 - analytics
