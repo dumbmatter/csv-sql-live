@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import AddNewCSVForm from './AddNewCSVForm';
 import Grid from './Grid';
+import LoadedTables from './LoadedTables';
 import QueryForm from './QueryForm';
 import emitter from './emitter';
 
@@ -12,7 +13,8 @@ const initialState = {
   errorMsg: undefined,
   query: '',
   result: undefined,
-  showModal: true,
+  showAddModal: true,
+  showTablesModal: false,
   status: 'init', // init, parsing-data, creating-db, loaded, running-query, query-error
 };
 
@@ -23,15 +25,27 @@ class App extends Component {
     this.state = initialState;
   }
 
-  closeModal = () => {
+  closeAddModal = () => {
     this.setState({
-      showModal: false,
+      showAddModal: false,
     });
   };
 
-  handleNewClick = () => {
+  closeTablesModal = () => {
     this.setState({
-      showModal: true,
+      showTablesModal: false,
+    });
+  };
+
+  handleAddClick = () => {
+    this.setState({
+      showAddModal: true,
+    });
+  };
+
+  handleTablesClick = () => {
+    this.setState({
+      showTablesModal: true,
     });
   };
 
@@ -42,7 +56,7 @@ class App extends Component {
 
     try {
       const res = this.state.db.exec(query);
-
+console.log('res', res);
       const result = res.length === 0 ? {
         cols: [],
         rows: [],
@@ -50,6 +64,7 @@ class App extends Component {
         cols: res[res.length - 1].columns,
         rows: res[res.length - 1].values,
       };
+console.log('result', result);
 
       this.setState({
         result,
@@ -87,8 +102,8 @@ class App extends Component {
             </Navbar.Brand>
           </Navbar.Header>
           <Navbar.Form pullRight>
-            <Button style={{marginRight: "0.5em"}}>Loaded Table Info</Button>
-            <Button bsStyle="danger" onClick={this.handleNewClick}>Add New CSV</Button>
+            <Button style={{marginRight: "0.5em"}} onClick={this.handleTablesClick}>Loaded Tables</Button>
+            <Button bsStyle="danger" onClick={this.handleAddClick}>Add New CSV</Button>
           </Navbar.Form>
         </Navbar>
 
@@ -106,8 +121,12 @@ class App extends Component {
           </footer>
         </div>
 
-        <Modal show={this.state.showModal} onHide={this.closeModal}>
-          <AddNewCSVForm closeModal={this.closeModal} db={this.state.db} status={this.state.status} />
+        <Modal show={this.state.showAddModal} onHide={this.closeAddModal}>
+          <AddNewCSVForm closeModal={this.closeAddModal} db={this.state.db} status={this.state.status} />
+        </Modal>
+
+        <Modal bsSize="large" show={this.state.showTablesModal} onHide={this.closeTablesModal}>
+          <LoadedTables db={this.state.db} show={this.state.showTablesModal} />
         </Modal>
       </div>
     );
