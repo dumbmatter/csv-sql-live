@@ -26,9 +26,11 @@ class App extends Component {
   }
 
   closeAddModal = () => {
-    this.setState({
-      showAddModal: false
-    });
+    if (this.state.status !== "init") {
+      this.setState({
+        showAddModal: false
+      });
+    }
   };
 
   closeTablesModal = () => {
@@ -97,7 +99,7 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className="flex-wrapper">
         <Navbar>
           <Navbar.Header>
             <Navbar.Brand style={{ color: "#000" }}>CSV SQL Live</Navbar.Brand>
@@ -115,7 +117,7 @@ class App extends Component {
           </Navbar.Form>
         </Navbar>
 
-        <div className="container">
+        <div className="container above-footer">
           <QueryForm status={this.state.status} />
           {["query-error"].includes(this.state.status) ? (
             <p className="alert alert-danger">
@@ -125,11 +127,21 @@ class App extends Component {
           {this.state.result !== undefined ? (
             <Grid cols={this.state.result.cols} rows={this.state.result.rows} />
           ) : null}
+        </div>
 
-          <div className="clearfix" />
+        <div className="clearfix container">
           <hr />
 
           <footer>
+            <p className="pull-right">
+              <a
+                href="https://github.com/dumbmatter/csv-sql-live"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on GitHub
+              </a>
+            </p>
             <p>
               Powered by{" "}
               <a
@@ -153,11 +165,6 @@ class App extends Component {
               >
                 SQLite
               </a>.
-            </p>
-            <p>
-              <a href="https://github.com/dumbmatter/csv-sql-live">
-                View on GitHub
-              </a>
             </p>
           </footer>
         </div>

@@ -6,11 +6,31 @@
     <meta name="theme-color" content="#000000">
     <title>CSV SQL Live - Run SQL queries on CSV files right in your web browser</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style type="text/css">
+/* https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/ */
+.full-height {
+  min-height: 100vh;
+}
+
+.flex-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.above-footer {
+  flex: 1;
+}
+
+footer {
+  margin-bottom: 20px;
+}
+    </style>
   </head>
-  <body>
+  <body class="full-height">
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
-    <div id="root"></div>
+    <div class="full-height" id="root"></div>
   </body>
 </html>

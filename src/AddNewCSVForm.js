@@ -131,7 +131,7 @@ class AddNewCSVForm extends Component {
   render() {
     return (
       <div>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton={this.props.status !== "init"}>
           <Modal.Title>Add New CSV</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -186,7 +186,9 @@ class AddNewCSVForm extends Component {
           ) : null}
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.props.closeModal}>Close</Button>
+          {this.props.status !== "init" ? (
+            <Button onClick={this.props.closeModal}>Close</Button>
+          ) : null}
           <Button
             bsStyle="primary"
             disabled={!this.state.fileName || !this.state.tableName}
