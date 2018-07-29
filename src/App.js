@@ -7,6 +7,7 @@ import Grid from "./Grid";
 import LoadedTables from "./LoadedTables";
 import QueryForm from "./QueryForm";
 import emitter from "./emitter";
+import "bootstrap/dist/css/bootstrap.css";
 
 const initialState = {
   db: undefined,
