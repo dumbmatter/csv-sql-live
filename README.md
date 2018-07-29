@@ -2,6 +2,7 @@
 
 Todo:
 
+- display something when add form is closed and no tables exist. or don't let add form be closed then?
 - handle weird column names, and display converted column names
   - table names too
   - some library to do it?

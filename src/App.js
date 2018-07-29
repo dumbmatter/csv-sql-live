@@ -131,9 +131,28 @@ class App extends Component {
 
           <footer>
             <p>
-              Powered by <a href="http://papaparse.com/">Papa Parse</a>,{" "}
-              <a href="https://github.com/kripken/sql.js/">sql.js</a>, and{" "}
-              <a href="https://www.sqlite.org/">SQLite</a>.
+              Powered by{" "}
+              <a
+                href="http://papaparse.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Papa Parse
+              </a>,{" "}
+              <a
+                href="https://github.com/kripken/sql.js/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                sql.js
+              </a>, and{" "}
+              <a
+                href="https://www.sqlite.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                SQLite
+              </a>.
             </p>
             <p>
               <a href="https://github.com/dumbmatter/csv-sql-live">
