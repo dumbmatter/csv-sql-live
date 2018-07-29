@@ -29,20 +29,24 @@ const createTable = (db, data, tableName) => {
   }
 
   const cols = data.shift();
-
   const query = `CREATE TABLE "${tableName}" (${cols.map((col) => `${col} TEXT`).join(',')});`;
   db.run(query);
 
-  const insertStmt = db.prepare(`INSERT INTO "${tableName}" VALUES (${cols.map((val) => '?').join(',')})`);
-  for (const row of data) {
-    if (row.length !== cols.length) {
-      console.log('skipping row', row);
-      continue;
+  try {
+    const insertStmt = db.prepare(`INSERT INTO "${tableName}" VALUES (${cols.map((val) => '?').join(',')})`);
+    for (const row of data) {
+      if (row.length !== cols.length) {
+        console.log('skipping row', row);
+        continue;
+      }
+      
+      insertStmt.run(row);
     }
-    
-    insertStmt.run(row);
+    insertStmt.free();
+  } catch (err) {
+    db.run(`DROP TABLE IF EXISTS "${tableName}"`);
+    throw err;
   }
-  insertStmt.free();
 
   return db;
 };
