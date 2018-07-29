@@ -8,7 +8,7 @@ import emitter from './emitter';
 class QueryForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {queryText: 'SELECT * FROM csv'};
+    this.state = {queryText: ''};
   }
 
   handleChange = (e) => {
@@ -18,6 +18,20 @@ class QueryForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     emitter.emit('runQuery', this.state.queryText);
+  }
+
+  newTable = (tableName) => {
+    if (this.state.queryText === "") {
+      this.state.queryText = `SELECT * FROM "${tableName}"`;
+    }
+  };
+
+  componentDidMount() {
+    emitter.on('newTable', this.newTable);
+  }
+
+  componentWillUnmount() {
+    emitter.off('newTable', this.newTable);
   }
 
   render() {

@@ -35,38 +35,46 @@ class App extends Component {
     });
   };
 
-  componentDidMount() {
-    emitter.on('updateState', (state) => {
-      this.setState(state);
+  runQuery = (query) => {
+    this.setState({
+      status: 'running-query',
     });
 
-    emitter.on('runQuery', (query) => {
+    try {
+      const res = this.state.db.exec(query);
+
+      const result = res.length === 0 ? {
+        cols: [],
+        rows: [],
+      } : {
+        cols: res[res.length - 1].columns,
+        rows: res[res.length - 1].values,
+      };
+
       this.setState({
-        status: 'running-query',
+        result,
+        status: 'loaded',
       });
+    } catch (err) {
+      this.setState({
+        errorMsg: err.message,
+        status: 'query-error',
+      });
+    }
+  };
 
-      try {
-        const res = this.state.db.exec(query);
+  updateState = (state) => {
+    this.setState(state);
+  };
 
-        const result = res.length === 0 ? {
-          cols: [],
-          rows: [],
-        } : {
-          cols: res[res.length - 1].columns,
-          rows: res[res.length - 1].values,
-        };
+  componentDidMount() {
+    emitter.on('runQuery', this.runQuery);
+    emitter.on('updateState', this.updateState);
+  }
 
-        this.setState({
-          result,
-          status: 'loaded',
-        });
-      } catch (err) {
-        this.setState({
-          errorMsg: err.message,
-          status: 'query-error',
-        });
-      }
-    });
+  componentWillUnmount() {
+    emitter.off('runQuery', this.runQuery);
+    emitter.off('updateState', this.updateState);
   }
 
   render() {

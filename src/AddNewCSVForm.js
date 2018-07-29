@@ -29,11 +29,9 @@ const createDB = (data, tableName) => {
   const cols = data.shift();
 
   const query = `CREATE TABLE "${tableName}" (${cols.map((col) => `${col} TEXT`).join(',')});`;
-console.log(query)
   db.run(query);
 
   const insertStmt = db.prepare(`INSERT INTO "${tableName}" VALUES (${cols.map((val) => '?').join(',')})`);
-console.log(insertStmt)
   for (const row of data) {
     if (row.length !== cols.length) {
       console.log('skipping row', row);
@@ -44,10 +42,7 @@ console.log(insertStmt)
   }
   insertStmt.free();
 
-  emitter.emit('updateState', {
-    db,
-    status: 'loaded',
-  });
+  return db;
 };
 
 const getTableName = (fileName) => {
@@ -96,7 +91,13 @@ class AddNewCSVForm extends Component {
       }
 
       const data = await parse(this.state.file);
-      createDB(data, this.state.tableName);
+      const db = createDB(data, this.state.tableName);
+
+      emitter.emit('updateState', {
+        db,
+        status: 'loaded',
+      });
+      emitter.emit('newTable', this.state.tableName);
 
       this.props.closeModal();
     } catch (err) {
