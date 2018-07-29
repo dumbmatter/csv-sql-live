@@ -22,16 +22,18 @@ class QueryForm extends Component {
 
   newTable = (tableName) => {
     if (this.state.queryText === "") {
-      this.state.queryText = `SELECT * FROM "${tableName}"`;
+      this.setState({
+        queryText: `SELECT * FROM "${tableName}"`,
+      });
     }
   };
 
   componentDidMount() {
-    emitter.on('newTable', this.newTable);
+    emitter.addListener('newTable', this.newTable);
   }
 
   componentWillUnmount() {
-    emitter.off('newTable', this.newTable);
+    emitter.removeListener('newTable', this.newTable);
   }
 
   render() {

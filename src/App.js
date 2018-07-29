@@ -68,13 +68,13 @@ class App extends Component {
   };
 
   componentDidMount() {
-    emitter.on('runQuery', this.runQuery);
-    emitter.on('updateState', this.updateState);
+    emitter.addListener('runQuery', this.runQuery);
+    emitter.addListener('updateState', this.updateState);
   }
 
   componentWillUnmount() {
-    emitter.off('runQuery', this.runQuery);
-    emitter.off('updateState', this.updateState);
+    emitter.removeListener('runQuery', this.runQuery);
+    emitter.removeListener('updateState', this.updateState);
   }
 
   render() {
