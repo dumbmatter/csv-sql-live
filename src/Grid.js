@@ -8,10 +8,15 @@ class Grid extends Component {
 
     this.state = {
       filters: {},
-      originalRows: this.props.rows,
       sortColumn: undefined,
       sortDirection: undefined,
-      rows: this.props.rows.slice(0)
+
+      // originalRows - straight from props, so retains all rows in original order
+      // filteredRows - filtered version of originalRows, so in original order
+      // rows - after filtering and sorting is applied
+      originalRows: this.props.rows,
+      filteredRows: this.props.rows.slice(),
+      rows: this.props.rows.slice()
     };
   }
 
@@ -26,7 +31,7 @@ class Grid extends Component {
     };
 
     const sortedRows =
-      sortDirection === "NONE" ? rows.slice(0) : rows.sort(comparer);
+      sortDirection === "NONE" ? rows.slice() : rows.sort(comparer);
     return sortedRows;
   };
 
@@ -37,7 +42,6 @@ class Grid extends Component {
     } else {
       delete newFilters[filter.column.key];
     }
-    console.log(newFilters, this.state.rows);
 
     let filteredRows = this.state.originalRows.slice();
 
@@ -49,32 +53,33 @@ class Grid extends Component {
       }
 
       const filterTerm = newFilters[col].filterTerm;
-      console.log(col, filterTerm);
       filteredRows = filteredRows.filter(row => row[i].includes(filterTerm));
     }
 
     // Also sort
+    let rows;
     if (
       this.state.sortColumn !== undefined &&
       this.state.sortDirection !== undefined
     ) {
-      filteredRows = this.sortRows(
+      rows = this.sortRows(
         filteredRows,
         this.state.sortColumn,
         this.state.sortDirection
       );
+    } else {
+      rows = filteredRows.slice();
     }
 
-    this.setState({ filters: newFilters, rows: filteredRows });
+    this.setState({ filters: newFilters, filteredRows, rows });
   };
 
   handleGridSort = (sortColumn, sortDirection) => {
-    // When no sort direction, go back to the order in originalRows
-    let rows =
-      sortDirection === "NONE" ? this.state.originalRows : this.state.rows;
-
-    rows = this.sortRows(rows, sortColumn, sortDirection);
-    console.log("rows", rows);
+    const rows = this.sortRows(
+      this.state.filteredRows.slice(),
+      sortColumn,
+      sortDirection
+    );
     this.setState({ rows, sortColumn, sortDirection });
   };
 
