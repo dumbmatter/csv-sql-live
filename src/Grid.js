@@ -55,7 +55,9 @@ class Grid extends Component {
       }
 
       const filterTerm = newFilters[col].filterTerm;
-      filteredRows = filteredRows.filter(row => row[i].includes(filterTerm));
+      filteredRows = filteredRows.filter(row =>
+        String(row[i]).includes(filterTerm)
+      );
     }
 
     // Also sort

@@ -8,6 +8,36 @@ import QueryForm from "./QueryForm";
 import emitter from "./emitter";
 import "bootstrap/dist/css/bootstrap.css";
 
+// This mutates rows!
+const parseFloats = rows => {
+  if (rows.length === 0) {
+    return;
+  }
+
+  const allFloats = new Set();
+  for (let i = 0; i < rows[0].length; i++) {
+    allFloats.add(i);
+  }
+
+  for (const row of rows) {
+    for (let i = 0; i < row.length; i++) {
+      if (Number.isNaN(parseFloat(row[i]))) {
+        allFloats.delete(i);
+      }
+
+      if (allFloats.size === 0) {
+        return;
+      }
+    }
+  }
+
+  for (const row of rows) {
+    for (const i of allFloats) {
+      row[i] = parseFloat(row[i]);
+    }
+  }
+};
+
 const initialState = {
   db: undefined,
   errorMsg: undefined,
@@ -66,6 +96,8 @@ class App extends Component {
               cols: res[res.length - 1].columns,
               rows: res[res.length - 1].values
             };
+
+      parseFloats(result.rows);
 
       this.setState({
         result,
