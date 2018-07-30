@@ -18,6 +18,8 @@ class Grid extends Component {
       filteredRows: this.props.rows.slice(),
       rows: this.props.rows.slice()
     };
+
+    this.gridRef = React.createRef();
   }
 
   sortRows = (rows, sortColumn, sortDirection) => {
@@ -90,10 +92,16 @@ class Grid extends Component {
     }, {});
   };
 
-  /*  componentDidMount(){
+  componentDidMount() {
     // https://stackoverflow.com/a/45597682/786644
-    this.gridRef.onToggleFilter();
-  }*/
+    if (
+      this.gridRef &&
+      this.gridRef.current &&
+      this.gridRef.current.onToggleFilter
+    ) {
+      this.gridRef.current.onToggleFilter();
+    }
+  }
 
   render() {
     if (this.props.cols.length === 0 && this.state.rows.length === 0) {
@@ -113,7 +121,7 @@ class Grid extends Component {
         onAddFilter={this.handleFilterChange}
         onGridSort={this.handleGridSort}
         toolbar={<Toolbar enableFilter={true} />}
-        //        ref={gridRef => { this.gridRef = gridRef; }}
+        ref={this.gridRef}
         rowGetter={this.rowGetter}
         rowsCount={this.state.rows.length}
         width={100}
