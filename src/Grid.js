@@ -20,7 +20,6 @@ class Grid extends Component {
 
   static getDerivedStateFromProps(props, state) {
     if (props.rows !== state.originalRows) {
-      console.log("UPDATE");
       return {
         filters: {},
         sortColumn: undefined,

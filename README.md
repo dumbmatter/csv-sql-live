@@ -1,5 +1,5 @@
 # CSV SQL Live!
 
-Todo:
+Run SQL queries on CSV files in your web browser. The future is now!
 
-- analytics
+http://dumbmatter.com/csv-sql-live/
