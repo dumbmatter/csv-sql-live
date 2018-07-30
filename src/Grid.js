@@ -120,6 +120,7 @@ class Grid extends Component {
             sortable: true
           };
         })}
+        minHeight={window.innerHeight - 200}
         onAddFilter={this.handleFilterChange}
         onGridSort={this.handleGridSort}
         toolbar={<Toolbar enableFilter={true} />}

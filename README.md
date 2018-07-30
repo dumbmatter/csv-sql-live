@@ -2,5 +2,5 @@
 
 Todo:
 
-- grid height 100%
+- 2nd query doesn't run, needs getDerivedStateFromProps maybe for Grid
 - analytics
