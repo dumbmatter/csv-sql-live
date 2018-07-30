@@ -10,16 +10,32 @@ class Grid extends Component {
       filters: {},
       sortColumn: undefined,
       sortDirection: undefined,
-
-      // originalRows - straight from props, so retains all rows in original order
-      // filteredRows - filtered version of originalRows, so in original order
-      // rows - after filtering and sorting is applied
-      originalRows: this.props.rows,
-      filteredRows: this.props.rows.slice(),
-      rows: this.props.rows.slice()
+      originalRows: [],
+      filteredRows: [],
+      rows: []
     };
 
     this.gridRef = React.createRef();
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.rows !== state.originalRows) {
+      console.log("UPDATE");
+      return {
+        filters: {},
+        sortColumn: undefined,
+        sortDirection: undefined,
+
+        // originalRows - straight from props, so retains all rows in original order
+        // filteredRows - filtered version of originalRows, so in original order
+        // rows - after filtering and sorting is applied
+        originalRows: props.rows,
+        filteredRows: props.rows.slice(),
+        rows: props.rows.slice()
+      };
+    }
+
+    return null;
   }
 
   sortRows = (rows, sortColumn, sortDirection) => {
