@@ -141,7 +141,8 @@ class AddNewCSVForm extends Component {
                 With CSV SQL Live you can{" "}
                 <strong className="text-success">
                   run SQL queries on data from CSV files
-                </strong>, right in your browser!
+                </strong>
+                , right in your browser!
               </p>
             </div>
             <div className="col-xs-12 col-md-6">
@@ -189,10 +190,18 @@ class AddNewCSVForm extends Component {
           <Button onClick={this.props.closeModal}>Close</Button>
           <Button
             bsStyle="primary"
-            disabled={!this.state.fileName || !this.state.tableName}
+            disabled={
+              !this.state.fileName ||
+              !this.state.tableName ||
+              this.props.status === "parsing-data" ||
+              this.props.status === "creating-db"
+            }
             onClick={this.handleSubmit}
           >
-            Add New CSV
+            {this.props.status === "parsing-data" ||
+            this.props.status === "creating-db"
+              ? "Loading..."
+              : "Add New CSV"}
           </Button>
         </Modal.Footer>
       </div>
