@@ -48,14 +48,20 @@ class QueryForm extends Component {
             componentClass="textarea"
             onChange={this.handleChange}
             value={this.state.queryText}
-            disabled={this.props.status !== "loaded"}
+            disabled={
+              this.props.status !== "loaded" &&
+              this.props.status !== "query-error"
+            }
           />
           <Button
             bsStyle="primary"
             style={{ marginTop: "0.5em" }}
             className="pull-right"
             type="submit"
-            disabled={this.props.status !== "loaded"}
+            disabled={
+              this.props.status !== "loaded" &&
+              this.props.status !== "query-error"
+            }
           >
             Run Query
           </Button>
