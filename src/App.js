@@ -150,7 +150,7 @@ class App extends Component {
           </div>
         </nav>
 
-        <div className="container above-footer full-width">
+        <div className="container-fluid above-footer full-width">
           <QueryForm status={this.state.status} />
           {this.state.status === "init" ? (
             <p
