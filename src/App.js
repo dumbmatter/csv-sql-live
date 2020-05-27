@@ -21,7 +21,7 @@ const parseFloats = rows => {
 
   for (const row of rows) {
     for (let i = 0; i < row.length; i++) {
-      if (Number.isNaN(parseFloat(row[i]))) {
+      if (row[i] !== parseFloat(row[i]).toString()) {
         allFloats.delete(i);
       }
 
