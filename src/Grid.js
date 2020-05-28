@@ -132,7 +132,8 @@ class Grid extends Component {
             key: col,
             name: col,
             filterable: true,
-            sortable: true
+            sortable: true,
+            resizable: true
           };
         })}
         minHeight={window.innerHeight - 200}

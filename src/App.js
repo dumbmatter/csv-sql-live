@@ -21,7 +21,7 @@ const parseFloats = rows => {
 
   for (const row of rows) {
     for (let i = 0; i < row.length; i++) {
-      if (Number.isNaN(parseFloat(row[i]))) {
+      if (row[i] !== parseFloat(row[i]).toString()) {
         allFloats.delete(i);
       }
 
@@ -150,7 +150,7 @@ class App extends Component {
           </div>
         </nav>
 
-        <div className="container above-footer full-width">
+        <div className="container-fluid above-footer full-width">
           <QueryForm status={this.state.status} />
           {this.state.status === "init" ? (
             <p
