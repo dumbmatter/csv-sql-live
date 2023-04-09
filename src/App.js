@@ -1,3 +1,4 @@
+import Papa from "papaparse";
 import React, { Component } from "react";
 import Button from "react-bootstrap/lib/Button";
 import Modal from "react-bootstrap/lib/Modal";
@@ -111,16 +112,33 @@ class App extends Component {
     }
   };
 
+  downloadResultSet = () => {
+    var outputData = this.state.result.rows;
+    outputData.unshift(this.state.result.cols);
+    const csvString = Papa.unparse(outputData);
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "CSV SQL LIVE output.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   updateState = state => {
     this.setState(state);
   };
 
   componentDidMount() {
+    emitter.addListener("downloadResultSet", this.downloadResultSet);
     emitter.addListener("runQuery", this.runQuery);
     emitter.addListener("updateState", this.updateState);
   }
 
   componentWillUnmount() {
+    emitter.removeListener("downloadResultSet", this.downloadResultSet);
     emitter.removeListener("runQuery", this.runQuery);
     emitter.removeListener("updateState", this.updateState);
   }
