@@ -8,7 +8,10 @@ import emitter from "./emitter";
 class QueryForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { queryText: "" };
+    this.state = {
+      queryText: "",
+      queryRan: false
+    };
   }
 
   handleChange = e => {
@@ -18,6 +21,14 @@ class QueryForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     emitter.emit("runQuery", this.state.queryText);
+    this.setState({
+      queryRan: true
+    });
+  };
+
+  handleClick = e => {
+    e.preventDefault();
+    emitter.emit("downloadResultSet");
   };
 
   newTable = tableName => {
@@ -54,8 +65,20 @@ class QueryForm extends Component {
             }
           />
           <Button
-            bsStyle="primary"
+            onClick={this.handleClick}
+            bsStyle="success"
             style={{ marginTop: "0.5em" }}
+            className="pull-right"
+            disabled={
+              this.props.status !== "loaded" ||
+              this.state.queryRan === false
+            }
+          >
+            Export Query Result
+          </Button>
+          <Button
+            bsStyle="primary"
+            style={{ marginTop: "0.5em", marginRight: "0.5em" }}
             className="pull-right"
             type="submit"
             disabled={
