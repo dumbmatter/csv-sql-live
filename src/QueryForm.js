@@ -30,15 +30,11 @@ class QueryForm extends Component {
 
   componentDidMount() {
     emitter.addListener("newTable", this.newTable);
-
-    // Add event listener for ctrl+enter key press
     document.addEventListener("keydown", this.handleKeyDown);
   }
 
   componentWillUnmount() {
     emitter.removeListener("newTable", this.newTable);
-
-    // Remove event listener for ctrl+enter key press
     document.removeEventListener("keydown", this.handleKeyDown);
   }
 
